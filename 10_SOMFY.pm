@@ -19,7 +19,7 @@
 #
 ##############################################################################
 #
-# $Id: 10_SOMFY.pm 12918 2019-08-10 13:10:00Z viegener $
+# $Id: 10_SOMFY.pm 16000 2019-08-10 13:10:00Z viegener $
 #  
 # SOMFY RTS / Simu Hz protocol module for FHEM
 # (c) Thomas Dankert <post@thomyd.de>
@@ -30,10 +30,10 @@
 ##############################################################################
 # History:
 #	1.0		thomyd			initial implementation
-#	1.1		Elektrolurch		state changed to open,close,pos <x>
-#	1.2		Elektrolurch		state is now set after reaching the position of the blind
+#	1.1		Elektrolurch	state changed to open,close,pos <x>
+#	1.2		Elektrolurch	state is now set after reaching the position of the blind
 #	1.3		thomyd			Basic implementation of "parse" function, requires updated CULFW
-#	1.4 		thomyd			Implemented fallback on/off-for-timer methods and only show warning about stop/go-my if the positioning attributes are set.
+#	1.4 	thomyd			Implemented fallback on/off-for-timer methods and only show warning about stop/go-my if the positioning attributes are set.
 #	1.5		thomyd			Bugfix for wrong attribute names when calculating the updatetime (drive-up-...)
 #	1.6		viegener		New state and action handling (trying to stay compatible also adding virtual receiver capabilities)
 #  2016-12-30 viegener - New sets / code-commands 9 / a  - wind_sun_9 / wind_only_a
@@ -1198,7 +1198,8 @@ sub SOMFY_CalcCurrentPos($$$$) {
 					$newPos = maxNum( 0, ($pos - $newPos) );
 				}
 			} else {
-				Log3($name,1,"SOMFY_CalcCurrentPos: $name move wrong $move");
+				Log3($name,1,"SOMFY_CalcCurrentPos: $name move wrong $move - set to 4POS");
+$newPos = $pos;
 			}			
 		} else {
 			if($move eq 'on') {
@@ -1232,7 +1233,8 @@ sub SOMFY_CalcCurrentPos($$$$) {
 					}
 				}
 			} else {
-				Log3($name,1,"SOMFY_CalcCurrentPos: $name move wrong $move");
+				Log3($name,1,"SOMFY_CalcCurrentPos: $name move wrong $move - SET TO $pos");
+$newPos = $pos;
 			}			
 		}
 	} else {
