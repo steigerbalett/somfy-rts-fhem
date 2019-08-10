@@ -495,7 +495,8 @@ sub SOMFY_Parse($$) {
 	# preprocessing if IODev is SIGNALduino	
 	if ($ioType eq "SIGNALduino") {
 		my $encData = substr($msg, 2);
-    $ret = "Somfy RTS message format error (length)! :".$encData.":" if (length($encData) != 14);
+    my $lengthEncData = length($encData);
+    $ret = "Somfy RTS message format error (length)! $encData (" . $lengthEncData ."), length should be 14 or 20" if ($lengthEncData != 14 &&  $lengthEncData != 20);
     $ret = "Somfy RTS message format error! :".$encData.":" if ( ( ! $ret ) && ($encData !~ m/[0-9A-F]{14}/) );
 	
     my ( $decData, $check );
